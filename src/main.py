@@ -1,14 +1,30 @@
+from typing import List
+from enum import Enum
 import pandas as pd
 from entities.field import Field
 from excel import Excel
 
-def main():
-    file_path = '/home/robson/Desktop/test.xlsx'
-    excel = Excel(pd, file_path)
-    fields = [
-        Field('Check List', 'check_list'),
-        Field('Anuncio', 'anuncio')
-    ]
-    excel.replace_columns_name(fields)
+class FileType(Enum):
+    EXCEL = 0
+    CSV   = 1
+    TXT   = 2
 
-main()
+class FileDatabase():
+    def __init__(self, file_type: FileType):
+        self.file_type = file_type
+
+    def run(self, file_path: str, fields: List[Field]):
+        database = self.launch_file(file_path)
+        database.replace_columns_name(fields)
+
+    def launch_file(self, file_path: str):
+        if self.file_type == FileType.EXCEL:
+            return Excel(pd, file_path)
+
+        if self.file_type == FileType.CSV:
+            pass
+
+        if self.file_type == FileType.TXT:
+            pass
+
+
